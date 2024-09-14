@@ -1,0 +1,77 @@
+openapi: 3.0.0
+info:
+  title: Smart Home Telemetry API
+  version: 1.0.0
+  description: API for managing telemetry data from smart home devices.
+servers:
+  - url: http://localhost:8080
+paths:
+  /telemetry/device/{deviceId}:
+    get:
+      summary: Get telemetry data by device ID
+      description: Retrieve a list of telemetry data associated with a specific device.
+      parameters:
+        - name: deviceId
+          in: path
+          required: true
+          description: The ID of the device for which telemetry is requested.
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of telemetry data for the specified device.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Telemetry'
+        '404':
+          description: Device not found
+        '500':
+          description: Internal server error
+
+  /telemetry:
+    post:
+      summary: Add new telemetry data
+      description: Submit telemetry data for a specific device.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Telemetry'
+      responses:
+        '201':
+          description: Telemetry data successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Telemetry'
+        '400':
+          description: Invalid input
+        '500':
+          description: Internal server error
+
+components:
+  schemas:
+    Telemetry:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the telemetry data.
+        deviceId:
+          type: integer
+          description: The ID of the associated device.
+        timestamp:
+          type: string
+          format: date-time
+          description: The time when the telemetry data was recorded.
+        value:
+          type: string
+          description: The recorded value (e.g., temperature, humidity).
+      required:
+        - deviceId
+        - timestamp
+        - value

@@ -1,12 +1,13 @@
-CREATE TABLE IF NOT EXISTS heating_systems (
-    id BIGSERIAL PRIMARY KEY,
-    is_on BOOLEAN NOT NULL,
-    target_temperature DOUBLE PRECISION NOT NULL,
-    current_temperature DOUBLE PRECISION NOT NULL
+CREATE TABLE IF NOT EXISTS Telemetry (
+                           id SERIAL PRIMARY KEY,
+                           device_id INT NOT NULL,
+                           metric_name VARCHAR(100) NOT NULL,
+                           metric_value FLOAT NOT NULL,
+                           create_at TIMESTAMP NOT NULL
 );
-
-CREATE TABLE IF NOT EXISTS temperature_sensors (
-    id BIGSERIAL PRIMARY KEY,
-    current_temperature DOUBLE PRECISION NOT NULL,
-    last_updated TIMESTAMP NOT NULL
+CREATE TABLE IF NOT EXISTS Alert (
+                       alert_id SERIAL PRIMARY KEY,
+                       device_id INT NOT NULL,
+                       alert_type VARCHAR(100) NOT NULL,
+                       resolved BOOLEAN NOT NULL DEFAULT FALSE
 );
